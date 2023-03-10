@@ -10,6 +10,10 @@ export const fetchDocsBySearch = createAsyncThunk(
       `http://localhost:4444/api/doc/search?query=${search.currentSearchValue}&page=${search.page}`
     );
 
+    console.log(
+      `http://localhost:4444/api/doc/search?query=${search.currentSearchValue}&page=${search.page}`
+    );
+
     return data;
   }
 );
@@ -19,17 +23,18 @@ const initialState = {
   page: 1,
   status: "loading",
   items: [],
+  isClicked: false,
 };
 
 export const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
-    setCurrentSearchValue(state, action) {
+    setSearchParams(state, action) {
       state.currentSearchValue = action.payload;
-    },
-    setItems(state, action) {
-      state.items = action.payload;
+      state.page = 1;
+      state.items = [];
+      state.isClicked = !state.isClicked;
     },
   },
 
@@ -40,7 +45,7 @@ export const searchSlice = createSlice({
 
     builder.addCase(fetchDocsBySearch.fulfilled, (state, action) => {
       state.status = "fulfilled";
-      state.items = [...state.items, ...action.payload];
+      state.items = action.payload;
       state.page += 1;
     });
 
@@ -50,6 +55,6 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { setCurrentSearchValue } = searchSlice.actions;
+export const { setSearchParams } = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   fetchDocsBySearch,
-  setCurrentSearchValue,
+  setSearchParams,
 } from "../redux/slices/searchSlice";
 
 import { useState } from "react";
@@ -21,8 +21,7 @@ function SearchInput() {
   };
 
   function onSubmit() {
-    dispatch(setCurrentSearchValue(searchValue));
-    dispatch(fetchDocsBySearch());
+    dispatch(setSearchParams(searchValue));
   }
 
   return (
