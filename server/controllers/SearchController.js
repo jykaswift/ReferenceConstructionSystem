@@ -12,6 +12,7 @@ class SearchController {
     const queryData = {
       _source: "doc_name",
       from: page === "1" ? 1 : page * 10,
+      size: 5,
       query: {
         match: {
           doc_html: query,

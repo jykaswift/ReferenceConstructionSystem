@@ -38,13 +38,9 @@ function Find() {
       <div className="container">
         <div className="content__find">
           <h1 className="find-title">Поиск по запросу: {currentSearchValue}</h1>
-          {status === "loading" ? (
-            <div>Loading</div>
-          ) : (
-            items.map((obj) => {
-              return <FindItem key={obj._id} name={obj._source.doc_name} />;
-            })
-          )}
+          {items.map((obj) => {
+            return <FindItem key={obj._id} name={obj._source.doc_name} />;
+          })}
           {items.length === 0 ? <div></div> : <div ref={ref}></div>}
         </div>
       </div>
