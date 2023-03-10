@@ -10,10 +10,28 @@ function Find() {
   );
   const dispatch = useDispatch();
 
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+  });
+
+  const isMounted = useRef(false);
+
   useEffect(() => {
     dispatch(fetchDocsBySearch());
-    console.log(1);
   }, [dispatch, isClicked]);
+
+  console.log(inView);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      if (inView === true) {
+        dispatch(fetchDocsBySearch());
+        console.log("fetching");
+      }
+    } else {
+      isMounted.current = true;
+    }
+  }, [inView]);
 
   return (
     <div className="content">
@@ -24,10 +42,10 @@ function Find() {
             <div>Loading</div>
           ) : (
             items.map((obj) => {
-              console.log(items);
               return <FindItem key={obj._id} name={obj._source.doc_name} />;
             })
           )}
+          {items.length === 0 ? <div></div> : <div ref={ref}></div>}
         </div>
       </div>
     </div>

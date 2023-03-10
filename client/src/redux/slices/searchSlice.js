@@ -45,7 +45,7 @@ export const searchSlice = createSlice({
 
     builder.addCase(fetchDocsBySearch.fulfilled, (state, action) => {
       state.status = "fulfilled";
-      state.items = action.payload;
+      state.items = [...state.items, ...action.payload];
       state.page += 1;
     });
 
