@@ -8,9 +8,10 @@ class SearchController {
     this.ELASTIC_PORT = process.env.ELASTIC_PORT;
   }
 
-  async getAllTitlesBy(query) {
+  async getAllTitlesBy({ query, page }) {
     const queryData = {
       _source: "doc_name",
+      from: page === "1" ? 1 : page * 10,
       query: {
         match: {
           doc_html: query,

@@ -1,6 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchDocsBySearch } from "../redux/slices/searchSlice";
+import {
+  fetchDocsBySearch,
+  setCurrentSearchValue,
+} from "../redux/slices/searchSlice";
 
 import { useState } from "react";
 
@@ -8,25 +11,26 @@ function SearchInput() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [currentSearchValue, setCurrentSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
-      onSubmit()
-      navigate("/search")
+      onSubmit();
+      navigate("/search");
     }
   };
 
   function onSubmit() {
-    dispatch(fetchDocsBySearch(currentSearchValue));
+    dispatch(setCurrentSearchValue(searchValue));
+    dispatch(fetchDocsBySearch());
   }
 
   return (
     <div className="header__search search">
       <input
         onKeyDown={onKeyDown}
-        value={currentSearchValue}
-        onChange={(event) => setCurrentSearchValue(event.target.value)}
+        value={searchValue}
+        onChange={(event) => setSearchValue(event.target.value)}
         type="text"
         className="search_input"
         placeholder="Название или номер ГОСТ-а"

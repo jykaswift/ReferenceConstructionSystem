@@ -1,4 +1,5 @@
 import SearchInput from "./searchInput";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
@@ -19,9 +20,9 @@ function Header() {
           </div>
           <div className="header__authed authed">
             <div className="authed__profile">
-              <a href="#" className="authed__image">
+              <Link to={"/"} href="#" className="authed__image">
                 <img src="../images/main/header/authed-profile.png" alt="" />
-              </a>
+              </Link>
               <div className="authed__info">
                 <div className="authed__name">Мохирева Арина Олеговна</div>
                 <div className="authed__mail">mohireva.ao@edu.spbstu.ru</div>

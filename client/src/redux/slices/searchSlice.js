@@ -3,17 +3,20 @@ import axios from "axios";
 
 export const fetchDocsBySearch = createAsyncThunk(
   "docs/fetchDocsBySearch",
-  async (currentSearchValue) => {
+  async (_, thunkAPI) => {
+    const { search } = thunkAPI.getState();
+
     const { data } = await axios.get(
-      `http://localhost:4444/api/doc/search?query=${currentSearchValue}`
+      `http://localhost:4444/api/doc/search?query=${search.currentSearchValue}&page=${search.page}`
     );
 
-    return { data, currentSearchValue };
+    return data;
   }
 );
 
 const initialState = {
-  searchValue: "",
+  currentSearchValue: "",
+  page: 1,
   status: "loading",
   items: [],
 };
@@ -22,8 +25,8 @@ export const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
-    setSearchValue(state, action) {
-      state.searchValue = action.payload;
+    setCurrentSearchValue(state, action) {
+      state.currentSearchValue = action.payload;
     },
     setItems(state, action) {
       state.items = action.payload;
@@ -37,30 +40,16 @@ export const searchSlice = createSlice({
 
     builder.addCase(fetchDocsBySearch.fulfilled, (state, action) => {
       state.status = "fulfilled";
-      state.searchValue = action.payload.currentSearchValue;
-      state.items = action.payload.data;
+      state.items = [...state.items, ...action.payload];
+      state.page += 1;
     });
 
     builder.addCase(fetchDocsBySearch.rejected, (state) => {
       state.status = "error";
     });
   },
-
-  // extraReducers: {
-  //   [fetchDocsBySearch.pending]: (state) => {
-  //     state.status = "loading";
-  //   },
-  //   [fetchDocsBySearch.fulfilled]: (state, action) => {
-  //     state.status = "fulfilled";
-  //     state.searchValue = action.payload.currentSearchValue;
-  //     state.items = action.payload.data;
-  //   },
-  //   [fetchDocsBySearch.rejected]: (state) => {
-  //     state.status = "error";
-  //   },
-  // },
 });
 
-export const { setSearchValue, setItems } = searchSlice.actions;
+export const { setCurrentSearchValue } = searchSlice.actions;
 
 export default searchSlice.reducer;
