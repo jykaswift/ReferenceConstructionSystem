@@ -1,9 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {
-  fetchDocsBySearch,
-  setSearchParams,
-} from "../redux/slices/searchSlice";
+import { setSearchParams } from "../redux/slices/searchSlice";
 
 import { useState } from "react";
 

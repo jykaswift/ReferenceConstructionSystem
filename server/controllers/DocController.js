@@ -12,8 +12,10 @@ class DocController {
     res.header("Access-Control-Allow-Methods", "GET");
     res.header("Access-Control-Allow-Headers", "accept, content-type");
     res.header("Access-Control-Max-Age", "1728000");
+    res.set("total-page", response.total);
+    res.set("Access-Control-Expose-Headers", "total-page");
 
-    res.json(response);
+    res.json(response.response);
   }
 }
 

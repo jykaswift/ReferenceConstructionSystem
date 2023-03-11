@@ -11,22 +11,33 @@ class SearchController {
   async getAllTitlesBy({ query, page }) {
     const queryData = {
       _source: "doc_name",
-      from: page === "1" ? 1 : page * 10,
-      size: 5,
+      from: page * 10,
+      size: 10,
       query: {
         match: {
           doc_html: query,
         },
       },
     };
-
+    console.log(queryData);
     return await this.axios
       .post(
         `http://${this.ELASTIC_HOST}:${this.ELASTIC_PORT}/_search`,
         queryData
       )
-      .then((response) => {
-        return response.data.hits.hits;
+      .then((resp) => {
+        console.log(resp.data.hits.total.value);
+        const total = Math.floor(resp.data.hits.total.value / 10);
+
+        const response = [];
+        resp.data.hits.hits.forEach((obj) => {
+          response.push({
+            id: obj._id,
+            doc_name: obj._source.doc_name,
+          });
+        });
+
+        return { response, total };
       })
       .catch((e) => {
         console.log(e);
