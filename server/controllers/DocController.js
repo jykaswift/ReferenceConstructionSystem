@@ -1,21 +1,47 @@
-const searchController = require("./SearchController");
+const ApiError = require("../error/ApiError");
+const axios = require("axios");
+const { ELASTIC_HOST, ELASTIC_PORT } = require("../env");
 
 class DocController {
-  async search(req, res) {
-    const { query } = req;
-    let response;
-    if (query) {
-      response = await searchController.getAllTitlesBy(query);
+  async getDocsBySearch(req, res, next) {
+    const { query, page } = req.query;
+
+    if (!page || !query) {
+      return next(ApiError.badRequest("No query or page"));
     }
 
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET");
-    res.header("Access-Control-Allow-Headers", "accept, content-type");
-    res.header("Access-Control-Max-Age", "1728000");
-    res.set("total-page", response.total);
-    res.set("Access-Control-Expose-Headers", "total-page");
+    const queryData = {
+      _source: "doc_name",
+      from: page * 10,
+      size: 10,
+      query: {
+        match: {
+          doc_html: query,
+        },
+      },
+    };
 
-    res.json(response.response);
+    axios
+      .post(`http://${ELASTIC_HOST}:${ELASTIC_PORT}/_search`, queryData)
+      .then((elastic_res) => {
+        const total = Math.floor(elastic_res.data.hits.total.value / 10);
+
+        const result = [];
+        elastic_res.data.hits.hits.forEach((obj) => {
+          result.push({
+            id: obj._id,
+            doc_name: obj._source.doc_name,
+          });
+        });
+
+        res.set("total-page", total);
+        res.set("Access-Control-Expose-Headers", "total-page");
+
+        res.json(result);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 }
 

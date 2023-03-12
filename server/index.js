@@ -1,18 +1,15 @@
 const express = require("express");
-const app = express();
 const router = require("./routes/index");
-require("dotenv").config();
-const SERVER_PORT = process.env.SERVER_PORT;
+const errorHandler = require("./middleware/ErrorHandlingMiddleware");
+const cors = require("cors");
+const { SERVER_PORT } = require("./env");
+const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use("/api", router);
-app.options("/url...", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET");
-  res.header("Access-Control-Allow-Headers", "accept, content-type");
-  res.header("Access-Control-Max-Age", "1728000");
-  return res.sendStatus(200);
-});
+
+app.use(errorHandler);
 
 const start = async () => {
   try {

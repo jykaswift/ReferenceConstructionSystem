@@ -12,6 +12,7 @@ function Find() {
     isLoading,
     totalPage,
     currentPage,
+    status,
   } = useSelector((state) => state.search);
 
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ function Find() {
         return <FindItem key={obj.id} name={obj.doc_name} />;
       })}
       <div ref={ref}></div>
+      {status === "loading" ? <div className={styles.loader}></div> : <></>}
     </>
   );
 
