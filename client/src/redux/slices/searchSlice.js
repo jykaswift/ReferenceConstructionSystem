@@ -6,11 +6,15 @@ export const fetchDocsBySearch = createAsyncThunk(
   async (_, thunkAPI) => {
     const { search } = thunkAPI.getState();
 
-    const { headers, data } = await axios.get(
-      `http://localhost:4444/api/doc/search?query=${search.currentSearchValue}&page=${search.currentPage}`
-    );
-    console.log("fetch");
-    return { data, totalPage: headers["total-page"] };
+    try {
+      const { headers, data } = await axios.get(
+        `http://localhost:4444/api/doc/search?query=${search.currentSearchValue}&page=${search.currentPage}`
+      );
+
+      return { data, totalPage: headers["total-page"] };
+    } catch (e) {
+      return { data: [], totalPage: 0 };
+    }
   }
 );
 
@@ -48,13 +52,11 @@ export const searchSlice = createSlice({
       state.currentPage += 1;
       state.isLoading = false;
       state.totalPage = parseInt(action.payload.totalPage);
-      console.log(state.items.length, "lenght");
-      console.log(state.currentPage, "current");
-      console.log(state.totalPage, "total");
     });
 
     builder.addCase(fetchDocsBySearch.rejected, (state) => {
       state.status = "error";
+      state.items = [];
     });
   },
 });

@@ -1,0 +1,45 @@
+.nav {
+  height: 50px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  border: 2px solid #1B4569;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.content {
+  background-color: white;
+  width: 100%;
+  min-height: 100px;
+}
+
+.title {
+  font-family: 'Roboto Light', sans-serif;
+  font-size: 32px;
+  margin-top: 50px;
+}
+
+.icon {
+  display: flex;
+  border-right: 2px solid #1B4569;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+
+  &:nth-child(6) {
+    border-right: 0;
+  }
+}
+
+.search {
+  font-family: 'Roboto Light', sans-serif;
+  font-size: 20px;
+  flex-grow: 1;
+  border-right: 2px solid #1B4569;
+  padding-left: 20px;
+  &::placeholder {
+
+  }
+}

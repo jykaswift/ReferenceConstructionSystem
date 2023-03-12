@@ -28,15 +28,13 @@ function Find() {
   useEffect(() => {
     if (isMounted.current) {
       if (inView === true && currentPage <= totalPage) {
-        console.log(currentPage, "current");
-        console.log(totalPage, "total");
-        dispatch(fetchDocsBySearch());
         console.log("fetching");
+        dispatch(fetchDocsBySearch());
       }
     } else {
       isMounted.current = true;
     }
-  }, [dispatch, inView]);
+  }, [dispatch, inView, totalPage]);
 
   const notFound = () => (
     <div className={styles.notFound}>
@@ -47,7 +45,7 @@ function Find() {
   const findItems = () => (
     <>
       {items.map((obj) => {
-        return <FindItem key={obj.id} name={obj.doc_name} />;
+        return <FindItem key={obj.id} name={obj.doc_name} id={obj.id} />;
       })}
       <div ref={ref}></div>
       {status === "loading" ? <div className={styles.loader}></div> : <></>}
