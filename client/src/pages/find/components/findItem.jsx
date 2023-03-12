@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { setDocId } from "../../../redux/slices/docSlice";
+import { Link } from "react-router-dom";
 
 function FindItem({ name, id }) {
   const dispatch = useDispatch();
@@ -13,7 +14,9 @@ function FindItem({ name, id }) {
     <div>
       <div className="find-item">
         <div className="find-item__info">
-          <a onClick={() => onTitleClicked()}>{name}</a>
+          <Link to={`/doc/${id}`} onClick={() => onTitleClicked()}>
+            {name}
+          </Link>
         </div>
         <div className="find-item__buttons">
           <a href="">

@@ -43,6 +43,23 @@ class DocController {
         console.log(e);
       });
   }
+
+  async getDocById(req, res, next) {
+    const { id } = req.query;
+
+    if (!id) {
+      return next(ApiError.badRequest("No id argument"));
+    }
+
+    axios
+      .get(`http://${ELASTIC_HOST}:${ELASTIC_PORT}/html_data/_source/${id}`)
+      .then((elastic_res) => {
+        res.json(elastic_res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 }
 
 module.exports = new DocController();

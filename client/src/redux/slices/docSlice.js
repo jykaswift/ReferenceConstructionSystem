@@ -4,21 +4,20 @@ import axios from "axios";
 export const fetchDocsById = createAsyncThunk(
   "docs/fetchDocsById",
   async (_, thunkAPI) => {
-    const { search } = thunkAPI.getState();
-
+    const { doc } = thunkAPI.getState();
     try {
-      const { headers, data } = await axios.get(
-        `http://localhost:4444/api/doc/search?query=${search.currentSearchValue}&page=${search.currentPage}`
+      const { data } = await axios.get(
+        `http://localhost:4444/api/doc/document?id=${doc.id}`
       );
-
-      return { data, totalPage: headers["total-page"] };
+      return data.doc_html;
     } catch (e) {
-      return { data: [], totalPage: 0 };
+      console.log(e, "error");
     }
   }
 );
 
 const initialState = {
+  status: "loading",
   id: "",
   content: "",
 };
@@ -29,7 +28,6 @@ export const docSlice = createSlice({
   reducers: {
     setDocId(state, action) {
       state.id = action.payload;
-      console.log(state.id);
     },
   },
 
@@ -40,6 +38,7 @@ export const docSlice = createSlice({
 
     builder.addCase(fetchDocsById.fulfilled, (state, action) => {
       state.status = "fulfilled";
+      state.content = action.payload;
     });
 
     builder.addCase(fetchDocsById.rejected, (state) => {
