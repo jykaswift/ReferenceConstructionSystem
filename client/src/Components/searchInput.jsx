@@ -13,7 +13,7 @@ function SearchInput() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       onSubmit();
-      navigate("/search");
+      navigate(`/search?query=${searchValue}`);
     }
   };
 
@@ -31,7 +31,11 @@ function SearchInput() {
         className="search_input"
         placeholder="Название или номер ГОСТ-а"
       />
-      <Link to="/search" onClick={() => onSubmit()} className="search_button">
+      <Link
+        to={`/search?query=${searchValue}`}
+        onClick={() => onSubmit()}
+        className="search_button"
+      >
         <img
           src="../images/main/header/searchicon.png"
           alt=""

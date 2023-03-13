@@ -2,8 +2,12 @@ import FindItem from "./components/findItem";
 import { useSelector, useDispatch } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useRef } from "react";
-import { fetchDocsBySearch } from "../../redux/slices/searchSlice";
+import {
+  fetchDocsBySearch,
+  setSearchParamsByURL,
+} from "../../redux/slices/searchSlice";
 import styles from "../../styles/modules/find.module.scss";
+import qs from "qs";
 function Find() {
   const {
     currentSearchValue,
@@ -22,13 +26,19 @@ function Find() {
   const isMounted = useRef(false);
 
   useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      dispatch(setSearchParamsByURL(params.query));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(fetchDocsBySearch());
   }, [dispatch, isClicked]);
 
   useEffect(() => {
     if (isMounted.current) {
       if (inView === true && currentPage <= totalPage) {
-        console.log("fetching");
         dispatch(fetchDocsBySearch());
       }
     } else {

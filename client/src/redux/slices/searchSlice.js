@@ -6,15 +6,15 @@ export const fetchDocsBySearch = createAsyncThunk(
   async (_, thunkAPI) => {
     const { search } = thunkAPI.getState();
 
-    try {
+    if (search.currentSearchValue) {
       const { headers, data } = await axios.get(
         `http://localhost:4444/api/doc/search?query=${search.currentSearchValue}&page=${search.currentPage}`
       );
 
       return { data, totalPage: headers["total-page"] };
-    } catch (e) {
-      return { data: [], totalPage: 0 };
     }
+
+    return { data: [], totalPage: 1 };
   }
 );
 
@@ -39,6 +39,13 @@ export const searchSlice = createSlice({
       state.isClicked = !state.isClicked;
       state.isLoading = true;
     },
+
+    setSearchParamsByURL(state, action) {
+      state.currentSearchValue = action.payload;
+      state.currentPage = 0;
+      state.items = [];
+      state.isLoading = true;
+    },
   },
 
   extraReducers: (builder) => {
@@ -61,6 +68,6 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { setSearchParams } = searchSlice.actions;
+export const { setSearchParams, setSearchParamsByURL } = searchSlice.actions;
 
 export default searchSlice.reducer;

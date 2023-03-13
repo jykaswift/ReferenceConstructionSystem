@@ -14,7 +14,7 @@ function FindItem({ name, id }) {
     <div>
       <div className="find-item">
         <div className="find-item__info">
-          <Link to={`/doc/${id}`} onClick={() => onTitleClicked()}>
+          <Link to={`/doc?id=${id}`} onClick={() => onTitleClicked()}>
             {name}
           </Link>
         </div>

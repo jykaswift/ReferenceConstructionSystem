@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />}></Route>
         <Route path="/search" element={<Find />}></Route>
-        <Route path="/doc/:id" element={<Doc />}></Route>
+        <Route path="/doc" element={<Doc />}></Route>
       </Routes>
       <Footer />
     </div>
