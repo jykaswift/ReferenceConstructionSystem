@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchDocsById, setDocId } from "../../redux/slices/docSlice";
 import { Interweave } from "interweave";
 import qs from "qs";
-import Hilitor from "./components/Hilitor";
 
 const Doc = () => {
   const dispatch = useDispatch();
@@ -23,23 +22,12 @@ const Doc = () => {
     dispatch(fetchDocsById());
   }, [dispatch]);
 
-  function submit() {
-    // let elem = document.getElementsByTagName("p");
-    // for (let index = 0; index < elem.length; ++index) {
-    //   elem[index].id = "test";
-    // }
-    let matchRegExp = new RegExp("(я)", "i");
-    console.log(matchRegExp.exec("от 3 я кек августа 2017 г. N 1105/пр nod"));
-    let hilitor = new Hilitor("test");
-    hilitor.apply("утвержден");
-  }
-
   return (
     <div className="content">
       <div className="container">
-        <button onClick={() => submit()}>fdsfdf</button>
         <div className={styles.title}>Свод правил СП 251.1325800.2016</div>
         <DocNav />
+
         <div id="test" className={styles.content}>
           <div dangerouslySetInnerHTML={{ __html: content }} />;
         </div>

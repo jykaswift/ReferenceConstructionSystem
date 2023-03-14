@@ -1,10 +1,7 @@
-export default function Hilitor(id, tag) {
+export default function Highlighter(id, tag) {
   const targetNode = document.getElementById(id) || document.body;
   const hiliteTag = tag || "MARK";
   const skipTags = new RegExp("^(?:" + hiliteTag + "|SCRIPT|FORM|SPAN)$");
-  const colors = ["#ff6", "#a0ffff", "#9f9", "#f99", "#f6f"];
-  const wordColor = [];
-  let colorIdx = 0;
   let matchRegExp = "";
   let endRegExp = new RegExp("^[^\\wА-я]+|[^\\wА-я]+$", "g");
 
@@ -35,13 +32,9 @@ export default function Hilitor(id, tag) {
     if (node.nodeType === 3) {
       let nv, regs;
       if ((nv = node.nodeValue) && (regs = matchRegExp.exec(nv))) {
-        if (!wordColor[regs[0].toLowerCase()]) {
-          wordColor[regs[0].toLowerCase()] = colors[colorIdx++ % colors.length];
-        }
-
         const match = document.createElement(hiliteTag);
         match.appendChild(document.createTextNode(regs[0]));
-        match.style.backgroundColor = wordColor[regs[0].toLowerCase()];
+        match.style.backgroundColor = "#ff6";
         match.style.color = "#000";
 
         const after = node.splitText(regs.index);
