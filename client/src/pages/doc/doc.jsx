@@ -28,8 +28,10 @@ const Doc = () => {
     // for (let index = 0; index < elem.length; ++index) {
     //   elem[index].id = "test";
     // }
+    let matchRegExp = new RegExp("(я)", "i");
+    console.log(matchRegExp.exec("от 3 я кек августа 2017 г. N 1105/пр nod"));
     let hilitor = new Hilitor("test");
-    hilitor.apply("3");
+    hilitor.apply("утвержден");
   }
 
   return (
