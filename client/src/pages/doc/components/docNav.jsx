@@ -1,28 +1,31 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "../../../styles/modules/doc.module.scss";
 import debonce from "lodash.debounce";
 import Highlighter from "./Highlighter";
 
 const DocNav = () => {
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [coords, setCoords] = useState([]);
+  const marks = useRef({});
   const buttons = useRef(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const highlight = useCallback(
     debonce((word) => {
+      window.scrollTo(0, 0);
       let highlighter = new Highlighter("test");
-      highlighter.apply(word);
-      if (word) {
-        let marksElements = document.getElementsByTagName("mark");
-        let yOfMarks = [];
-        for (let mark of marksElements) {
-          yOfMarks.push(mark.getBoundingClientRect().y - 80);
+      let isFound = highlighter.apply(word);
+      if (word && isFound) {
+        marks.current.marks = document.getElementsByTagName("mark");
+
+        let coordsOfMarks = [];
+        for (let mark of marks.current.marks) {
+          coordsOfMarks.push(mark.getBoundingClientRect().y - 100);
         }
 
-        setCoords(yOfMarks);
+        marks.current.coords = coordsOfMarks;
+        marks.current.i = 0;
 
-        window.scrollTo(0, marksElements[0].getBoundingClientRect().y - 80);
+        window.scrollTo(0, marks.current.coords[0]);
+        marks.current.marks[0].style.backgroundColor = "orange";
 
         buttons.current.style.display = "flex";
       } else buttons.current.style.display = "none";
@@ -31,19 +34,29 @@ const DocNav = () => {
   );
 
   function scrollToMark(isDown) {
-    window.scrollTo(0, coords[currentIndex]);
-
-    if (currentIndex >= coords.length - 1) {
-      setCurrentIndex(0);
+    if (marks.current.marks.length === 1) {
       return;
     }
 
+    marks.current.marks[marks.current.i].style.backgroundColor = "#ff6";
+
     if (isDown) {
-      setCurrentIndex(currentIndex + 1);
+      marks.current.i += 1;
+    } else {
+      marks.current.i -= 1;
     }
 
-    if (!isDown && currentIndex != 0) {
+    if (marks.current.i >= marks.current.marks.length) {
+      marks.current.i = 0;
     }
+
+    if (marks.current.i < 0) {
+      marks.current.i = marks.current.marks.length - 1;
+    }
+
+    marks.current.marks[marks.current.i].style.backgroundColor = "orange";
+
+    window.scrollTo(50, marks.current.coords[marks.current.i]);
   }
 
   return (

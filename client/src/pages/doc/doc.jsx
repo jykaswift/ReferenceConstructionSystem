@@ -4,7 +4,6 @@ import styles from "../../styles/modules/doc.module.scss";
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDocsById, setDocId } from "../../redux/slices/docSlice";
-import { Interweave } from "interweave";
 import qs from "qs";
 
 const Doc = () => {

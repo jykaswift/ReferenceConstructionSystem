@@ -4,7 +4,7 @@ export default function Highlighter(id, tag) {
   const skipTags = new RegExp("^(?:" + hiliteTag + "|SCRIPT|FORM|SPAN)$");
   let matchRegExp = "";
   let endRegExp = new RegExp("^[^\\wА-я]+|[^\\wА-я]+$", "g");
-
+  let isFound = false;
   let breakRegExp = new RegExp("[^\\w'А-я-]+", "g");
 
   this.setRegex = function (input) {
@@ -36,7 +36,7 @@ export default function Highlighter(id, tag) {
         match.appendChild(document.createTextNode(regs[0]));
         match.style.backgroundColor = "#ff6";
         match.style.color = "#000";
-
+        isFound = true;
         const after = node.splitText(regs.index);
         after.nodeValue = after.nodeValue.substring(regs[0].length);
         node.parentNode.insertBefore(match, after);
@@ -63,6 +63,6 @@ export default function Highlighter(id, tag) {
     if (this.setRegex(input)) {
       this.hiliteWords(targetNode);
     }
-    return matchRegExp;
+    return isFound;
   };
 }
